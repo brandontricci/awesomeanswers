@@ -1,0 +1,15 @@
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: awesomeanswers_development
+  pool: 5
+  username: tammam
+  password:
+
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: awesomeanswers_test
+  pool: 5
+  username: tammam
+  password: 

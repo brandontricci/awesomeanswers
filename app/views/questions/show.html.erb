@@ -1,0 +1,54 @@
+<h1><%= @question.title %></h1>
+<p><%= @question.body %></p>
+<p>Hit Count: <%= @question.hit_count %></p>
+<p>Like Count: <%= @question.like_count %></p>
+<%= render "/votes/vote_buttons", question: @question %>
+<p>
+  <% if user_signed_in? %>
+    <% if current_user.has_liked? @question %>
+      <%= link_to "UnLike", question_likes_path(@question), class: "btn btn-danger", method: :delete %>
+    <% else %>
+      <%= link_to "Like", question_likes_path(@question), class: "btn btn-primary", method: :post %>
+    <% end %>
+  <% end %>
+  |
+  <%= link_to "Edit", edit_question_path(@question), class: "btn btn-info" %>
+  <%= link_to "Delete", @question, method: :delete, class: "btn btn-danger", data: {confirm: "Are you sure?"} %>
+</p>
+<br/>
+
+<%= form_for [@question, @answer] do |f| %>
+  <% if @answer.errors.any? %>
+    <div id="error_explanation">
+      <ul>
+      <% @answer.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="form-group">
+    <%= f.label :body, "Enter New Answer" %>
+    <%= f.text_field :body, class: "form-control" %>
+  </div>
+  <%= f.submit class: "btn btn-primary" %>
+<% end %>
+
+<h2>Answers</h2>
+<% @answers.each do |answer| %>
+  <div class="row">
+    <div class="col-lg-10"><%= answer.body %></div>
+    <div class="col-lg-6">
+      <div class="pull-right">
+        <%= link_to "Delete", [@question, answer], method: :delete, class: "btn btn-danger", data: {confirm: "Are you sure you want to delete answer?"} %>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-1">
+      <p>Created On: <%= formatted_date(answer.created_at) %>
+    </div>
+  </div>
+  <hr>
+<% end %>
+<%= link_to "All Questions", questions_path %>
